@@ -12,6 +12,7 @@ timidri/NodeCentOSPSimpleAppDocker:
     - echo "DD_BUILDNUM- $DISTELLI_BUILDNUM"    
     - echo "DD_REPO- $DISTELLI_DOCKER_REPO"    
     - echo "DD_PATH- $DISTELLI_DOCKER_PATH"    
+    - echo $DISTELLI_BUILDNUM > ./BUILD_NUMBER
 
     ### Docker Build Commands ###
     - docker login -u "$DISTELLI_DOCKER_USERNAME" -p "$DISTELLI_DOCKER_PW" $DISTELLI_DOCKER_ENDPOINT
