@@ -1,15 +1,36 @@
-timidri/NodeCentOSPSimpleApp:
+timidri/NodeCentOSPSimpleAppDocker:
   # This Basic Distelli Manifest assumes the following
   # has been provisioned on the destination deploy server:
 
+  Build:
+    ### Application build commands should be first ###
+    ###
+    - echo "DD_USERNAME- $DISTELLI_DOCKER_USERNAME"
+    - echo "DD_EMAIL-    $DISTELLI_DOCKER_EMAIL"
+    - echo "DD_ENDPOINT- $DISTELLI_DOCKER_ENDPOINT"
+    - echo "DD_PORTS-    $DISTELLI_DOCKER_PORTS"
+    - echo "DD_BUILDNUM- $DISTELLI_BUILDNUM"    
+    - echo "DD_REPO- $DISTELLI_DOCKER_REPO"    
+    - echo "DD_PATH- $DISTELLI_DOCKER_PATH"    
+
+    ### Docker Build Commands ###
+    - docker login -u "$DISTELLI_DOCKER_USERNAME" -p "$DISTELLI_DOCKER_PW" $DISTELLI_DOCKER_ENDPOINT
+    - docker build --quiet=false -t "$DISTELLI_DOCKER_REPO" "$DISTELLI_DOCKER_PATH"
+    - docker tag "$DISTELLI_DOCKER_REPO" "$DISTELLI_DOCKER_REPO:$DISTELLI_BUILDNUM"
+    - docker push "$DISTELLI_DOCKER_REPO:$DISTELLI_BUILDNUM"
+    ### End Docker Build Commands ###
+  
   PkgInclude:
     - server.js
   PkgExclude:
     - node_modules/
   PreInstall:
-    - echo "PreInstall Starting."
-    - sudo yum -y install epel-release
-    - sudo yum -y install nodejs npm --enablerepo=epel
+    - echo "DD_USERNAME- $DISTELLI_DOCKER_USERNAME"
+    - echo "DD_EMAIL-    $DISTELLI_DOCKER_EMAIL"
+    - echo "DD_ENDPOINT- $DISTELLI_DOCKER_ENDPOINT"
+    ### Docker Pre Install Commands ###
+    - docker login -u "$DISTELLI_DOCKER_USERNAME" -p "$DISTELLI_DOCKER_PW" "$DISTELLI_DOCKER_ENDPOINT"
+    ### End Docker Pre Install Commands ###
   PostInstall:
     - echo "PostInstall Starting."
     # - npm install
@@ -17,5 +38,10 @@ timidri/NodeCentOSPSimpleApp:
     - echo "Exec Starting."
     - publicip=$(curl -s ident.me) || true
     - 'echo "You can validate the install by pointing your browser at http://$publicip:8080"'
-
-    - exec node server.js
+    ### Docker Exec Commands ###
+    - cid=$(uuidgen)
+    - trap 'sudo docker stop $cid' SIGTERM
+    - sudo -E docker run --name=$cid $DISTELLI_DOCKER_ENVS --rm=true $DISTELLI_DOCKER_PORTS  "$DISTELLI_DOCKER_REPO:$DISTELLI_BUILDNUM" &
+    - wait
+    - "true"
+    ### End Docker Exec Commands ###
