@@ -15,4 +15,7 @@ timidri/NodeCentOSPSimpleApp:
     # - npm install
   Exec:
     - echo "Exec Starting."
+    - publicip=$(curl -s ident.me) || true
+    - 'echo "You can validate the install by pointing your browser at http://$publicip:8080"'
+
     - exec node server.js
