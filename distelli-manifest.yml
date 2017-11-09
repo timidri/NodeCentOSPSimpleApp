@@ -16,6 +16,6 @@ timidri/NodeCentOSPSimpleApp:
   Exec:
     - echo "Exec Starting."
     - publicip=$(curl -s ident.me) || true
-    - 'echo "You can validate the install by pointing your browser at http://$publicip:8080"'
+    - 'echo "You can validate the install by pointing your browser at http://$publicip:3000"'
 
     - exec node server.js
