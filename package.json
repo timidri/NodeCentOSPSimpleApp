@@ -1,0 +1,24 @@
+{
+  "name": "nodecentospsimpleapp",
+  "version": "1.0.0",
+  "description": "This tutorial will walk you through deploying a simple Hello World Node.js Application to any server with <a href=\"https://www.distelli.com\" target=\"_blank\">Distelli</a>.",
+  "main": "server.js",
+  "dependencies": {
+    "ip": "^1.1.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timidri/NodeCentOSPSimpleApp.git"
+  },
+  "author": "Dimitri Tischenko",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/timidri/NodeCentOSPSimpleApp/issues"
+  },
+  "homepage": "https://github.com/timidri/NodeCentOSPSimpleApp#readme"
+}
